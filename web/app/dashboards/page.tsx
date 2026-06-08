@@ -205,6 +205,13 @@ export default function DashboardPage() {
     //a árvore devolve apenas as X mais recentes
     return rbt.getLatest(limitToFetch);
   }, [reports, treeLimit]);
+    
+  const treeLimitOptions = useMemo(() => {
+    const options = Array.from({ length: 50 }, (_, i) => String(i + 1));
+    options.push("100", "Todas");
+    return options;
+  }, []);
+    
   useEffect(() => {
     let isMounted = true;
 
@@ -603,7 +610,7 @@ export default function DashboardPage() {
             />
             <FilterDropdown
               label="Ocorrências"
-              options={["10", "25", "50", "100", "Todas"]}
+              options={treeLimitOptions}
               selected={treeLimit === 0 ? "Todas" : String(treeLimit)}
               open={openFilter === "treeLimit"}
               onToggle={() => toggleFilter("treeLimit")}
