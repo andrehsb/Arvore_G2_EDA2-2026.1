@@ -17,6 +17,60 @@ export class TreeNode {
 export class RedBlackTree {
     root: TreeNode | null = null;
 
+    private rotateLeft(node: TreeNode) {
+        const rightChild = node.right;
+
+        if (rightChild === null) {
+            return;
+        }
+
+        node.right = rightChild.left;
+
+        if (rightChild.left !== null) {
+            rightChild.left.parent = node;
+        }
+
+        rightChild.parent = node.parent;
+
+        if (node.parent === null) {
+            this.root = rightChild;
+        } else if (node === node.parent.left) {
+            node.parent.left = rightChild;
+        } else {
+            node.parent.right = rightChild;
+        }
+
+        rightChild.left = node;
+        node.parent = rightChild;
+    }
+
+    private rotateRight(node: TreeNode) {
+        const leftChild = node.left;
+
+        if (leftChild === null) {
+            return;
+        }
+
+        node.left = leftChild.right;
+
+        if (leftChild.right !== null) {
+            leftChild.right.parent = node;
+        }
+
+        leftChild.parent = node.parent;
+
+        if (node.parent === null) {
+            this.root = leftChild;
+        } else if (node === node.parent.right) {
+            node.parent.right = leftChild;
+        } else {
+            node.parent.left = leftChild;
+        }
+
+        leftChild.right = node;
+        node.parent = leftChild;
+    }
+
     public insert(key: number, data: ReportResponse) {
         const newNode = new TreeNode(key, data);
 
