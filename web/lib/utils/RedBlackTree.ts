@@ -71,6 +71,59 @@ export class RedBlackTree {
         node.parent = leftChild;
     }
 
+        private fixInsert(node: TreeNode) {
+        while (node.parent !== null && node.parent.color === 'RED') {
+            const parent = node.parent;
+            const grandparent = parent.parent;
+
+            if (grandparent === null) {
+                break;
+            }
+
+            if (parent === grandparent.left) {
+                const uncle = grandparent.right;
+
+                if (uncle !== null && uncle.color === 'RED') {
+                    parent.color = 'BLACK';
+                    uncle.color = 'BLACK';
+                    grandparent.color = 'RED';
+                    node = grandparent;
+                } else {
+                    if (node === parent.right) {
+                        node = parent;
+                        this.rotateLeft(node);
+                    }
+
+                    node.parent!.color = 'BLACK';
+                    grandparent.color = 'RED';
+                    this.rotateRight(grandparent);
+                }
+            } else {
+                const uncle = grandparent.left;
+
+                if (uncle !== null && uncle.color === 'RED') {
+                    parent.color = 'BLACK';
+                    uncle.color = 'BLACK';
+                    grandparent.color = 'RED';
+                    node = grandparent;
+                } else {
+                    if (node === parent.left) {
+                        node = parent;
+                        this.rotateRight(node);
+                    }
+
+                    node.parent!.color = 'BLACK';
+                    grandparent.color = 'RED';
+                    this.rotateLeft(grandparent);
+                }
+            }
+        }
+
+        if (this.root !== null) {
+            this.root.color = 'BLACK';
+        }
+    }
+
     public insert(key: number, data: ReportResponse) {
         const newNode = new TreeNode(key, data);
 
@@ -100,6 +153,7 @@ export class RedBlackTree {
         } else if (parent !== null) {
             parent.right = newNode;
         }
+        this.fixInsert(newNode);
     }
     public getLatest(limit: number): ReportResponse[] {
         const result: ReportResponse[] = [];
