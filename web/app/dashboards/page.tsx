@@ -197,7 +197,7 @@ export default function DashboardPage() {
 
     //joga TODOS os dados do banco para dentro da árvore se auto-balancear
     reports.forEach(report => {
-      const timeKey = new Date(report.crimeDate).getTime();
+      const timeKey = new Date(report.createdDate).getTime();
       rbt.insert(timeKey, report);
     });
     const limitToFetch = treeLimit === 0 ? reports.length : treeLimit;
